@@ -1,1 +1,29 @@
 
+
+### PURPOSE
+ERC20Permit is a contract which implements permits and relies on max allowances
+This contract can work for multiple user-added ERC20 token by just inheriting the ERC20Permit contract
+
+### Step by step flow: 
+1. Signature is generated off chain by the owner address.
+2. The owner address should have some tokens minted using TestERC20.sol /any contract(which inherits ERC20Permit.sol)
+3. The spender in signature can be ERC20Permit.address or a specific user address. The allowance given is set to UINT_MAX amount which is 2^31 - 1.
+4. A new spender address can use the signature by using permit function and either specifying v,r,s values of signature or can use permitUsingSignature function if only bytes signature is to be used.
+5. Permit function verifies the signature and allots the allowance to the spender account. By doing this the owner account doesnt need to spend gas for providing approval.
+6. The spender address can now use the transferFrom function to transfer tokens from owner account to his/her account
+
+### STEPS TO RUN
+1. Deploy the contract TestERC20/ any contract(which inherits ERC20Permit.sol). Run the following commands to deploy on mumbai testnet:
+`npx hardhat run --network mumbai scripts/1_deploy.js`
+`npx hardhat verify --contract contracts/Dai.sol:TestDai --network mumbai <contractAddress>`
+2. Signature generation is done off-chain and a ulitity file is written for the same: utils/signatures.js
+
+### IMPROVEMENT POINT
+- A frontend can be developed for faster and easier generation of the signature which is connected to wallet for testing purpose. 
+- Test cases can be done
+
+### Tech Stack Used
+- Hardhat - Deploying and testing
+- Mumbai testnet
+- Solidity - contracts
+- Javascript - signature utility file

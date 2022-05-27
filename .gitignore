@@ -1,0 +1,5 @@
+backup_contracts
+node_modules
+.env
+artifacts
+cache
